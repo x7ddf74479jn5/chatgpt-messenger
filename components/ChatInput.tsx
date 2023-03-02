@@ -3,7 +3,8 @@
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
-import { FormEventHandler, useState } from "react";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { db } from "../firebase";
 
 type Props = {
@@ -34,7 +35,7 @@ export const ChatInput = ({ chatId }: Props) => {
 
     await addDoc(collection(db, "users", session?.user?.email!, "chats", chatId, "messages"), message);
 
-    // Toast notification loading
+    const notification = toast.loading("ChatGPTが思考中…");
 
     await fetch("/api/askQuestion", {
       method: "Post",
@@ -48,7 +49,9 @@ export const ChatInput = ({ chatId }: Props) => {
         session,
       }),
     }).then(() => {
-      // Toast notification success
+      toast("ChatGPTが返答しました！", {
+        id: notification,
+      });
     });
   };
 
