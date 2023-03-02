@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth";
+import { ClientProvider } from "../components/ClientProvider";
 import { Login } from "../components/Login";
 import { SessionProvider } from "../components/SessionProvider";
 import { SideBar } from "../components/SideBar";
@@ -20,6 +21,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <div className="bg-[#202123] max-w-sx h-screen overflow-y-auto md:min-w-[20rem]">
                 <SideBar />
               </div>
+
+              <ClientProvider />
+
               <div className="bg-[#343541] flex-1">{children}</div>
             </div>
           )}
