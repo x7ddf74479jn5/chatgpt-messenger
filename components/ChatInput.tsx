@@ -5,7 +5,9 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import useSWR from "swr";
 import { db } from "../firebase";
+import { ModalSelection } from "./ModalSelection";
 
 type Props = {
   chatId: string;
@@ -14,7 +16,9 @@ export const ChatInput = ({ chatId }: Props) => {
   const [prompt, setPrompt] = useState("");
   const { data: session } = useSession();
 
-  const model = "text-davinci-003";
+  const { data: model, mutate: setModel } = useSWR("model", {
+    fallbackData: "text-davinci-003",
+  });
 
   const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +80,9 @@ export const ChatInput = ({ chatId }: Props) => {
         </button>
       </form>
 
-      <div className="">{/* ModalSection */}</div>
+      <div className="md:hidden">
+        <ModalSelection />
+      </div>
     </div>
   );
 };
